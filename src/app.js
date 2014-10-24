@@ -85,28 +85,28 @@ var HelloWorldLayer = cc.Layer.extend({
 
         var staticBody = space.staticBody;
 
-        var walls = [new cp.SegmentShape(staticBody, cp.v(0,0), cp.v(winSize.width,0), 0),               // bottom
-                     new cp.SegmentShape(staticBody, cp.v(0,winSize.height), cp.v(winSize.width,winSize.height), 0),    // top
-            new cp.SegmentShape(staticBody, cp.v(0,0), cp.v(0,winSize.height), 0),             // left
-            new cp.SegmentShape(staticBody, cp.v(winSize.width,0), cp.v(winSize.width,winSize.height), 0)  // right
+        var walls = [new cp.SegmentShape(staticBody, cp.v(0,0), cp.v(winSize.width,0), 10),               // bottom
+                     new cp.SegmentShape(staticBody, cp.v(0,winSize.height), cp.v(winSize.width,winSize.height), 10),    // top
+            new cp.SegmentShape(staticBody, cp.v(0,0), cp.v(0,winSize.height), 10),             // left
+            new cp.SegmentShape(staticBody, cp.v(winSize.width,0), cp.v(winSize.width,winSize.height), 10)  // right
         ];
         
         for (var i = 0; i < walls.length; i++) {
             var shape = walls[i];
-            shape.setElasticity(1);
-            shape.setFriction(1);
+            shape.setElasticity(1.0);
+            shape.setFriction(0.0);
             space.addStaticShape(shape);
         }
         
         // Gravity
-        space.gravity = cp.v(0, -1000);
+        space.gravity = cp.v(0, -100);
 
         this.space = space;
     },
 
     update:function (dt) {
         // chipmunk step
-        this.space.step(dt);
+        this.space.step(1/60);
     },
     
     addChildPhysics: function(obj, z) {
