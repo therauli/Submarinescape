@@ -64,6 +64,12 @@ var HelloWorldLayer = cc.Layer.extend({
                 cc.tintTo(2.5,255,125,0)
             )
         );
+        cc.log('whee');
+        var shapoid = new Shapoid();
+        cc.log(shapoid);
+        this.addChild(shapoid, 10);
+        shapoid.setPosition(100, 100);
+
         return true;
     }
 });
