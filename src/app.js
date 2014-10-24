@@ -76,6 +76,19 @@ var HelloWorldLayer = cc.Layer.extend({
         
         this.addChildPhysics(shapoid, 10);
 
+        var that = this;
+        cc.eventManager.addListener({
+            event: cc.EventListener.KEYBOARD,
+            onKeyPressed:  function(keyCode, event){
+                cc.log("Key " + (cc.sys.isNative ? that.getNativeKeyName(keyCode) : String.fromCharCode(keyCode) ) + "(" + keyCode.toString()  + ") was pressed!");
+
+            },
+            onKeyReleased: function(keyCode, event){
+                cc.log("Key " + (cc.sys.isNative ? that.getNativeKeyName(keyCode) : String.fromCharCode(keyCode) ) + "(" + keyCode.toString()  + ") was released!");
+
+            }
+        }, that);
+
 
         return true;
     },
