@@ -2,6 +2,7 @@
 var HelloWorldLayer = cc.Layer.extend({
     sprite: null,
     space: null,
+    shapoid: null,
     ctor: function () {
         //////////////////////////////
         // 1. super init first
@@ -68,19 +69,21 @@ var HelloWorldLayer = cc.Layer.extend({
 
 
         cc.log('whee');
-        var shapoid = new Shapoid();
-        cc.log(shapoid);
+        this.shapoid = new Shapoid();
         
         this.initPhysics(size);
         this.scheduleUpdate();
         
-        this.addChildPhysics(shapoid, 10);
+        this.addChildPhysics(this.shapoid, 10);
 
         var that = this;
         cc.eventManager.addListener({
             event: cc.EventListener.KEYBOARD,
             onKeyPressed:  function(keyCode, event){
                 cc.log("Key " + (cc.sys.isNative ? that.getNativeKeyName(keyCode) : String.fromCharCode(keyCode) ) + "(" + keyCode.toString()  + ") was pressed!");
+                var dir = cp.v(100, 0);
+
+                that.shapoid.applyImpulse(dir);
 
             },
             onKeyReleased: function(keyCode, event){
@@ -100,8 +103,8 @@ var HelloWorldLayer = cc.Layer.extend({
 
         var walls = [new cp.SegmentShape(staticBody, cp.v(0,0), cp.v(winSize.width,0), 10),               // bottom
                      new cp.SegmentShape(staticBody, cp.v(0,winSize.height), cp.v(winSize.width,winSize.height), 10),    // top
-            new cp.SegmentShape(staticBody, cp.v(0,0), cp.v(0,winSize.height), 10),             // left
-            new cp.SegmentShape(staticBody, cp.v(winSize.width,0), cp.v(winSize.width,winSize.height), 10)  // right
+                     new cp.SegmentShape(staticBody, cp.v(0,0), cp.v(0,winSize.height), 10),             // left
+                     new cp.SegmentShape(staticBody, cp.v(winSize.width,0), cp.v(winSize.width,winSize.height), 10)  // right
         ];
         
         for (var i = 0; i < walls.length; i++) {

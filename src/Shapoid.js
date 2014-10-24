@@ -7,14 +7,23 @@ var Shapoid = cc.PhysicsSprite.extend({
         cc.log(res.shapoid_ball_png);
         this.initWithFile(res.shapoid_ball_png);
 
-        
-        this.body = new cp.Body(10, cp.momentForCircle(10, 0, 20, cp.vzero));
+        this.body = new cp.Body(10, cp.momentForCircle(10, 0, 15, cp.vzero));
         this.body.p = cc.p(100, 100);
 
-        this.shape = new cp.CircleShape(this.body, 20, cp.vzero);
+        this.shape = new cp.CircleShape(this.body, 15, cp.vzero);
         this.shape.setElasticity(1.0);
         this.shape.setFriction(0.0);
 
         this.setBody(this.body);
+    },
+
+    applyImpulse : function(dir) {
+        var body = this.getBody();
+        var vel = body.getVel();
+        if (Math.abs(vel.x) < 40) {
+            body.applyImpulse(dir, cp.vzero);
+        }
+
+        
     }
 });
