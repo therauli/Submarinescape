@@ -20,10 +20,12 @@ var Shapoid = cc.PhysicsSprite.extend({
     applyImpulse : function(dir) {
         var body = this.getBody();
         var vel = body.getVel();
-        if (Math.abs(vel.x) < 40) {
+        if (dir.x > 0 && vel.x < 40) {
             body.applyImpulse(dir, cp.vzero);
         }
 
-        
+        if (dir.x < 0 && vel.x > -40) {
+            body.applyImpulse(dir, cp.vzero);
+        }
     }
 });

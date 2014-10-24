@@ -81,7 +81,17 @@ var HelloWorldLayer = cc.Layer.extend({
             event: cc.EventListener.KEYBOARD,
             onKeyPressed:  function(keyCode, event){
                 cc.log("Key " + (cc.sys.isNative ? that.getNativeKeyName(keyCode) : String.fromCharCode(keyCode) ) + "(" + keyCode.toString()  + ") was pressed!");
-                var dir = cp.v(100, 0);
+                var x = 0;
+
+                if (keyCode == 39) {
+                    x = 100;
+                }
+
+                if (keyCode == 37) {
+                    x = -100;
+                }
+                var dir = cp.v(x, 0);
+                cc.log(dir);
 
                 that.shapoid.applyImpulse(dir);
 
