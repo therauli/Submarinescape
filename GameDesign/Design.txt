@@ -1,2 +1,19 @@
+Pelin tavoite:
+*Ohjaa Shapoid kentässä löytyvälle ovelle käyttäen hyväksi eri muotojen ominaisuuksia ja kykyä jakaantua (aloittaa alusta).
+
+*Sokeri muuttaa Shapoidin muodon. Jokaiselle muutokselle oma sokerikasansa.
+
+*Shapoidin perusmuoto: pallo
+
 Hahmot:
--Pallo
+*Pallo 
+	- Jatkuva toiminta: Pomppii. Voidaan ohjata vasemmalle tai oikealle.
+	- Käyttötoiminto: Ei ole.
+
+*Soikio
+	- Jatkuva toiminta: Pomppii. Voidaan ohjata vasemmalle tai oikealle.
+	- Käyttötoiminto: Jää paikalleen (rakentaa portaita)
+
+*Kolmio 
+	- Jatkuva käyttäytyminen: Raketti. Lentoradan kulmaa voi ohjata.
+	- Käyttötoiminto: Räjähtää aiheuttaen paineaallon.
