@@ -1,7 +1,8 @@
 
 var HelloWorldLayer = cc.Layer.extend({
-    sprite:null,
-    ctor:function () {
+    sprite: null,
+    space: null,
+    ctor: function () {
         //////////////////////////////
         // 1. super init first
         this._super();
@@ -64,14 +65,63 @@ var HelloWorldLayer = cc.Layer.extend({
                 cc.tintTo(2.5,255,125,0)
             )
         );
+
+
         cc.log('whee');
         var shapoid = new Shapoid();
         cc.log(shapoid);
-        this.addChild(shapoid, 10);
-        shapoid.setPosition(100, 100);
+        
+        this.initPhysics(size);
+        this.scheduleUpdate();
+        
+        this.addChildPhysics(shapoid, 10);
+
 
         return true;
+    },
+    
+    initPhysics: function(winSize) {
+        space = new cp.Space();
+
+        var staticBody = space.staticBody;
+
+        var walls = [new cp.SegmentShape(staticBody, cp.v(0,0), cp.v(winSize.width,0), 0),               // bottom
+                     new cp.SegmentShape(staticBody, cp.v(0,winSize.height), cp.v(winSize.width,winSize.height), 0),    // top
+            new cp.SegmentShape(staticBody, cp.v(0,0), cp.v(0,winSize.height), 0),             // left
+            new cp.SegmentShape(staticBody, cp.v(winSize.width,0), cp.v(winSize.width,winSize.height), 0)  // right
+        ];
+        
+        for (var i = 0; i < walls.length; i++) {
+            var shape = walls[i];
+            shape.setElasticity(1);
+            shape.setFriction(1);
+            space.addStaticShape(shape);
+        }
+        
+        // Gravity
+        space.gravity = cp.v(0, -1000);
+
+        this.space = space;
+    },
+
+    update:function (dt) {
+        // chipmunk step
+        this.space.step(dt);
+    },
+    
+    addChildPhysics: function(obj, z) {
+        this.addChild(obj, z)
+        
+        cc.log('Adding', obj);
+        
+        this.space.addBody(obj.body);
+
+        this.space.addShape(obj.shape);
+        
+        
     }
+
+
 });
 
 var HelloWorldScene = cc.Scene.extend({
