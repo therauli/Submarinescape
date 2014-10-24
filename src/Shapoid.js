@@ -27,5 +27,11 @@ var Shapoid = cc.PhysicsSprite.extend({
         if (dir.x < 0 && vel.x > -40) {
             body.applyImpulse(dir, cp.vzero);
         }
+    },
+
+    resetImpulse: function() {
+        var body = this.getBody();
+        var vel = body.getVel();
+        body.setVel(cp.v(0, vel.y));
     }
 });

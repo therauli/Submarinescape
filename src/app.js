@@ -98,6 +98,7 @@ var HelloWorldLayer = cc.Layer.extend({
             },
             onKeyReleased: function(keyCode, event){
                 cc.log("Key " + (cc.sys.isNative ? that.getNativeKeyName(keyCode) : String.fromCharCode(keyCode) ) + "(" + keyCode.toString()  + ") was released!");
+                that.shapoid.resetImpulse()
 
             }
         }, that);
