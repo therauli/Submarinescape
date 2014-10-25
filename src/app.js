@@ -19,12 +19,6 @@ var HelloWorldLayer = cc.Layer.extend({
                                 size.height / 2 );
 
         cc.log('whee');
-        this.shapoid = new Shapoid();
-
-        this.startPoint = levels[this.currentLevel]["start"];
-        this.shapoid.setPosition(this.startPoint);
-
-        this.endPoint = levels[this.currentLevel]["end"];
 
         this.drawNode = new cc.DrawNode();
         this.addChild(this.drawNode, 50);
@@ -32,8 +26,6 @@ var HelloWorldLayer = cc.Layer.extend({
         this.initPhysics(size);
         this.scheduleUpdate();
         
-        this.addChildPhysics(this.shapoid, 10);
-
         var that = this;
         cc.eventManager.addListener({
             event: cc.EventListener.KEYBOARD,
@@ -66,6 +58,7 @@ var HelloWorldLayer = cc.Layer.extend({
             }
         }, that);
 
+        this.loadLevel( this.currentLevel );
         return true;
     },
     
@@ -94,22 +87,6 @@ var HelloWorldLayer = cc.Layer.extend({
         // Gravity
         space.gravity = cp.v(0, -100);
 
-        // Setup platforms
-        for( var i = 0; i < levels[this.currentLevel]["platforms"].length; i++ ){
-            this.addPlatform( levels[this.currentLevel]["platforms"][i] )
-
-        }
-        cc.log('Platforms, done');
-
-        // setup obstacles if any        
-        if( levels[this.currentLevel]["obstacles"] !== undefined ) {        
-            for( var i = 0; i < levels[this.currentLevel]["obstacles"].length; i++ ){
-                this.addObstacle( levels[this.currentLevel]["obstacles"][i] )
-            }
-        }
-        
-        cc.log('Obstacles, done');
-
         // collisionhandler        
         space.addCollisionHandler(1, 2, this.collisionBottomBegin, null, null, null);
 
@@ -118,12 +95,38 @@ var HelloWorldLayer = cc.Layer.extend({
         this._debugNode.visible = true; //set this 
         this.addChild(this._debugNode, 1000);
 
+        space.addCollisionHandler(1, 3, this.collisionEndBegin, null, null, null);
+
+    },
+
+    loadLevel : function( lvl )
+    {
+        this.shapoid = new Shapoid();
+        this.startPoint = levels[this.currentLevel]["start"];
+        cc.log("diudiu", this.startPoint );
+        this.shapoid.setPosition(this.startPoint);
+        this.addChildPhysics(this.shapoid, 10);
+
         // endpoint
-        var endPoint = new EndPoint(staticBody, this.endPoint);
+        var endPoint = new EndPoint(this.space.staticBody, this.endPoint);
         space.addStaticShape(endPoint.shape);
         this.addChild(endPoint, 10);
 
-        space.addCollisionHandler(1, 3, this.collisionEndBegin, null, null, null);
+        this.endPoint = levels[this.currentLevel]["end"]; 
+        // Setup platforms
+        for( var i = 0; i < levels[lvl]["platforms"].length; i++ ){
+            this.addPlatform( levels[lvl]["platforms"][i] )
+
+        }
+        cc.log('Platforms, done');
+
+        // setup obstacles if any        
+        if( levels[lvl]["obstacles"] !== undefined ) {        
+            for( var i = 0; i < levels[lvl]["obstacles"].length; i++ ){
+                this.addObstacle( levels[lvl]["obstacles"][i] )
+            }
+        }
+        cc.log('Obstacles, done');
 
     },
 
