@@ -59,6 +59,14 @@ var HelloWorldLayer = cc.Layer.extend({
                 }
                 var dir = cp.v(x, 0);
 
+                //debug stuff only
+                if (keyCode == 32) {
+                    that.space.removeShape(that.shapoid.shape);
+                    that.shapoid.morphToTriangloid();
+                    that.space.addShape(that.shapoid.shape);
+                }
+
+
                 that.shapoid.applyImpulse(dir);
 
             },
@@ -118,7 +126,6 @@ var HelloWorldLayer = cc.Layer.extend({
 
         // collisionhandler        
         space.addCollisionHandler(1, 2, this.collisionBottomBegin, null, null, null);
-        cc.log('ekk');
 
         // debug stuph
         this._debugNode = new cc.PhysicsDebugNode(space);
@@ -131,9 +138,6 @@ var HelloWorldLayer = cc.Layer.extend({
         this.addChild(endPoint, 10);
 
         space.addCollisionHandler(1, 3, this.collisionEndBegin, null, null, null);
-        cc.log('erete');
-
-
 
     },
 
@@ -166,6 +170,7 @@ var HelloWorldLayer = cc.Layer.extend({
     update:function (dt) {
         // chipmunk step
         this.space.step(1/60);
+        this.shapoid.update(dt);
     },
     
     addChildPhysics: function(obj, z) {

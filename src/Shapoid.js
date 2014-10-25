@@ -1,6 +1,7 @@
 var Shapoid = cc.PhysicsSprite.extend({
     body: null,
     shape: null,
+    type: null,
     ctor: function() {
         this._super();
         cc.log("Whee!!");
@@ -17,7 +18,33 @@ var Shapoid = cc.PhysicsSprite.extend({
 
         this.shape.setCollisionType(1);
 
+        this.type = "circloid";
+
     },
+
+    morphToTriangloid : function() {
+        this.type = "triangloid";
+        cc.log('new type is', this.type);
+        
+        cc.textureCache.addImage(res.triangloid_png);
+
+        this.setTexture(cc.textureCache.getTextureForKey(res.triangloid_png));
+        var verts = [-10, -10,
+                     0, 10,
+                     10, -10,
+        ];
+        this.shape = new cp.PolyShape(this.body, verts, cp.vzero);
+        this.getBody().resetForces();
+        
+    },
+
+    update : function(dt) {
+        if (this.type === "triangloid") {
+            this.getBody().applyForce(cp.v(0, 20), cp.vzero);
+        }
+        
+    },
+
 
     applyImpulse : function(dir) {
         var body = this.getBody();
@@ -35,5 +62,11 @@ var Shapoid = cc.PhysicsSprite.extend({
         var body = this.getBody();
         var vel = body.getVel();
         body.setVel(cp.v(0, vel.y));
+    },
+
+    getType : function() {
+        return this.type;
     }
+
+    
 });
