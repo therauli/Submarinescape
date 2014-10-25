@@ -108,11 +108,12 @@ var HelloWorldLayer = cc.Layer.extend({
         this.addChildPhysics(this.shapoid, 10);
 
         // endpoint
+        this.endPoint = levels[this.currentLevel]["end"]; 
         var endPoint = new EndPoint(this.space.staticBody, this.endPoint);
         space.addStaticShape(endPoint.shape);
         this.addChild(endPoint, 10);
 
-        this.endPoint = levels[this.currentLevel]["end"]; 
+
         // Setup platforms
         for( var i = 0; i < levels[lvl]["platforms"].length; i++ ){
             this.addPlatform( levels[lvl]["platforms"][i] )
