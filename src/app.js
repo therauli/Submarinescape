@@ -51,7 +51,7 @@ var HelloWorldLayer = cc.Layer.extend({
                 //debug stuff only
                 if (keyCode == 32) {
                     that.space.removeShape(that.shapoid.shape);
-                    that.shapoid.morphToTriangloid();
+                    that.shapoid.morphToEllipsoid();//Triangloid();
                     that.space.addShape(that.shapoid.shape);
                 }
 
@@ -94,8 +94,8 @@ var HelloWorldLayer = cc.Layer.extend({
         // Gravity
         space.gravity = cp.v(0, -100);
 
-        for( var i = 0; i < levels[this.currentLevel]["platforms"].length; i++ ){
-            this.addPlatform( levels[this.currentLevel]["platforms"][i] )
+        for (var i = 0; i < levels[this.currentLevel]["platforms"].length; i++ ) {
+            this.addPlatform( levels[this.currentLevel]["platforms"][i] );
 
         }
 

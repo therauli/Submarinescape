@@ -38,6 +38,29 @@ var Shapoid = cc.PhysicsSprite.extend({
         
     },
 
+    morphToEllipsoid : function() {
+        this.type = "ellipsoid";
+        cc.log('new type is', this.type);
+        
+        cc.textureCache.addImage(res.ellipsoid_png);
+        
+        this.setTexture(cc.textureCache.getTextureForKey(res.ellipsoid_png));
+
+        var verts = [2, -10,
+                    -2, -10,
+                    -6, -5,
+                    -6, 5,
+                    -2, 10,
+                     2, 10,
+                     6, 6,
+                     6, -6
+                    ];
+
+        this.shape = new cp.PolyShape(this.body, verts, cp.vzero);
+        this.getBody().resetForces();
+
+    },
+
     update : function(dt) {
         if (this.type === "triangloid") {
             var angle = this.getRotation();
