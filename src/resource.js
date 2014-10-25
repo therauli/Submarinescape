@@ -3,6 +3,7 @@ var res = {
     shapoid_ball_png : "res/shapoid_ball.png",
     ellipsoid_png : "res/Ellipsoid.png",
     triangloid_png : "res/Triangloid.png",
+    bacground_png : "res/Background.png",
     end_point_png : "res/end.png"
 };
 
