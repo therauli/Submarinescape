@@ -95,14 +95,13 @@ var HelloWorldLayer = cc.Layer.extend({
                     x = -100;
                 }
                 var dir = cp.v(x, 0);
-                cc.log(dir);
 
                 that.shapoid.applyImpulse(dir);
 
             },
             onKeyReleased: function(keyCode, event){
                 //cc.log("Key " + (cc.sys.isNative ? that.getNativeKeyName(keyCode) : String.fromCharCode(keyCode) ) + "(" + keyCode.toString()  + ") was released!");
-                that.shapoid.resetImpulse()
+                that.shapoid.resetImpulse();
 
             }
         }, that);
@@ -112,36 +111,47 @@ var HelloWorldLayer = cc.Layer.extend({
     
     initPhysics: function(winSize) {
         space = new cp.Space();
+        this.space = space;
 
         var staticBody = space.staticBody;
 
-        var walls = [new cp.SegmentShape(staticBody, cp.v(0,0), cp.v(winSize.width,0), 1),               // bottom
-                     new cp.SegmentShape(staticBody, cp.v(0,winSize.height), cp.v(winSize.width,winSize.height), 1),    // top
-                     new cp.SegmentShape(staticBody, cp.v(0,0), cp.v(0,winSize.height), 1),             // left
-                     new cp.SegmentShape(staticBody, cp.v(winSize.width,0), cp.v(winSize.width,winSize.height), 1)  // right
-        ];
+        var walls = [new cp.SegmentShape(staticBody, cp.v(0,0), cp.v(winSize.width,0), 2),
+                     new cp.SegmentShape(staticBody, cp.v(0,winSize.height), cp.v(winSize.width,winSize.height), 1),
+                     new cp.SegmentShape(staticBody, cp.v(0,0), cp.v(0,winSize.height), 1),
+                     new cp.SegmentShape(staticBody, cp.v(winSize.width,0), cp.v(winSize.width,winSize.height), 1)];
         
         for (var i = 0; i < walls.length; i++) {
             var shape = walls[i];
             shape.setElasticity(1.0);
             shape.setFriction(0.0);
             space.addStaticShape(shape);
+            shape.setCollisionType(2);
         }
+
+        //add collision tag for bottom wall
+        walls[0].setCollisionType(2);
         
         // Gravity
         space.gravity = cp.v(0, -100);
 
-        this.space = space;
-
-
         //add some platforms
         this.addPlatform(cc.p(0, 0), cc.size(300, 10)); 
 
-        // debug only
-        this._debugNode = new cc.PhysicsDebugNode(this.space);
-        this._debugNode.visible = true;
+        // collisionhandler
+        
+        space.addCollisionHandler(1, 2, this.collisionBottomBegin, null, null, null);
+        cc.log('ekk');
+
+        // debug stuph
+        this._debugNode = new cc.PhysicsDebugNode(space);
+        this._debugNode.visible = true; //set this 
         this.addChild(this._debugNode, 1000);
 
+
+    },
+
+    collisionBottomBegin : function(arbiter, space) {
+        cc.log("doom");
     },
 
     addPlatform : function(start, size) {
