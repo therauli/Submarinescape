@@ -11,7 +11,7 @@ var HelloWorldLayer = cc.Layer.extend({
         this._super();
 
         var size = cc.winSize;
-        this.currentLevel = 0;
+        this.currentLevel = 1;
         this.sprite = new cc.Sprite(res.bacground_png);
         this.addChild(this.sprite, 0);
         this.sprite.setOpacity( 150 );
@@ -85,10 +85,21 @@ var HelloWorldLayer = cc.Layer.extend({
         // Gravity
         space.gravity = cp.v(0, -100);
 
+        // Setup platforms
         for( var i = 0; i < levels[this.currentLevel]["platforms"].length; i++ ){
             this.addPlatform( levels[this.currentLevel]["platforms"][i] )
 
         }
+        cc.log('Platforms, done');
+
+        // setup obstacles if any        
+        if( levels[this.currentLevel]["obstacles"] !== undefined ) {        
+            for( var i = 0; i < levels[this.currentLevel]["obstacles"].length; i++ ){
+                this.addObstacle( levels[this.currentLevel]["obstacles"][i] )
+            }
+        }
+        
+        cc.log('Obstacles, done');
 
         // collisionhandler        
         space.addCollisionHandler(1, 2, this.collisionBottomBegin, null, null, null);
@@ -135,6 +146,25 @@ var HelloWorldLayer = cc.Layer.extend({
         this.space.addStaticShape(shape);
 
         this.drawNode.drawRect(cc.p(rect.x, rect.y), cc.p(rect.x + rect.width, rect.y + rect.height), cc.color(255, 0, 0, 255), 1, cc.color(144, 0, 0 ,255));
+    },
+
+    addObstacle : function( rect ) {
+        var verts = [
+            rect.x, rect.y,
+            rect.x, rect.y + rect.height,
+            rect.x + rect.width, rect.y + rect.height,
+            rect.x + rect.width, rect.y
+        ];
+
+    
+        
+        var shape = new cp.PolyShape(this.space.staticBody, verts, cp.vzero);
+        shape.setElasticity(1.0);
+        shape.setFriction(0.0);
+        shape.setCollisionType(4);
+        this.space.addStaticShape(shape);
+
+        this.drawNode.drawRect(cc.p(rect.x, rect.y), cc.p(rect.x + rect.width, rect.y + rect.height), cc.color(127, 108, 179, 255), 1, cc.color(127, 108, 179 ,255));
     },
 
     update:function (dt) {
