@@ -4,46 +4,13 @@ var HelloWorldLayer = cc.Layer.extend({
     space: null,
     shapoid: null,
     drawNode: null,
+    startPoint: null,
+    endPoint: null,
+
     ctor: function () {
-        //////////////////////////////
-        // 1. super init first
         this._super();
 
-        /////////////////////////////
-        // 2. add a menu item with "X" image, which is clicked to quit the program
-        //    you may modify it.
-        // ask the window size
         var size = cc.winSize;
-
-        // add a "close" icon to exit the progress. it's an autorelease object
-        var closeItem = new cc.MenuItemImage(
-            res.CloseNormal_png,
-            res.CloseSelected_png,
-            function () {
-                cc.log("Menu is clicked!");
-            }, this);
-        closeItem.attr({
-            x: size.width - 20,
-            y: 20,
-            anchorX: 0.5,
-            anchorY: 0.5
-        });
-
-        var menu = new cc.Menu(closeItem);
-        menu.x = 0;
-        menu.y = 0;
-        this.addChild(menu, 1);
-
-        /////////////////////////////
-        // 3. add your codes below...
-        // add a label shows "Hello World"
-        // create and initialize a label
-        var helloLabel = new cc.LabelTTF("Hello World", "Arial", 38);
-        // position the label on the center of the screen
-        helloLabel.x = size.width / 2;
-        helloLabel.y = 0;
-        // add the label as a child to this layer
-        this.addChild(helloLabel, 5);
 
         // add "HelloWorld" splash screen"
         this.sprite = new cc.Sprite(res.HelloWorld_png);
@@ -61,13 +28,6 @@ var HelloWorldLayer = cc.Layer.extend({
                 cc.scaleTo(2, 1, 1)
             )
         );
-        helloLabel.runAction(
-            cc.spawn(
-                cc.moveBy(2.5, cc.p(0, size.height - 40)),
-                cc.tintTo(2.5,255,125,0)
-            )
-        );
-
 
         cc.log('whee');
         this.shapoid = new Shapoid();
@@ -83,10 +43,8 @@ var HelloWorldLayer = cc.Layer.extend({
         var that = this;
         cc.eventManager.addListener({
             event: cc.EventListener.KEYBOARD,
-            onKeyPressed:  function(keyCode, event){
-                //cc.log("Key " + (cc.sys.isNative ? that.getNativeKeyName(keyCode) : String.fromCharCode(keyCode) ) + "(" + keyCode.toString()  + ") was pressed!");
+            onKeyPressed: function(keyCode, event){
                 var x = 0;
-
                 if (keyCode == 39) {
                     x = 100;
                 }
@@ -100,7 +58,6 @@ var HelloWorldLayer = cc.Layer.extend({
 
             },
             onKeyReleased: function(keyCode, event){
-                //cc.log("Key " + (cc.sys.isNative ? that.getNativeKeyName(keyCode) : String.fromCharCode(keyCode) ) + "(" + keyCode.toString()  + ") was released!");
                 that.shapoid.resetImpulse();
 
             }
