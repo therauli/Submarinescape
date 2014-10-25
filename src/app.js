@@ -11,8 +11,7 @@ var HelloWorldLayer = cc.Layer.extend({
         this._super();
 
         var size = cc.winSize;
-
-        // add "HelloWorld" splash screen"
+        this.currentLevel = 0;
         this.sprite = new cc.Sprite(res.bacground_png);
         this.addChild(this.sprite, 0);
         this.sprite.setOpacity( 150 );
@@ -22,10 +21,10 @@ var HelloWorldLayer = cc.Layer.extend({
         cc.log('whee');
         this.shapoid = new Shapoid();
 
-        this.startPoint = cc.p(100, 200);
+        this.startPoint = levels[this.currentLevel]["start"];
         this.shapoid.setPosition(this.startPoint);
 
-        this.endPoint = cc.p(300, 100);
+        this.endPoint = levels[this.currentLevel]["end"];
 
         this.drawNode = new cc.DrawNode();
         this.addChild(this.drawNode, 50);
@@ -95,25 +94,10 @@ var HelloWorldLayer = cc.Layer.extend({
         // Gravity
         space.gravity = cp.v(0, -100);
 
-        //add some platforms
-        // Starting platform
-        this.addPlatform(cc.p(0, 50), cc.size(200, 10));
-        
-        // Left wall
-        this.addPlatform(cc.p(0, 50), cc.size(10, 750));
-        
-        // Ceiling
-        this.addPlatform(cc.p(0, 440), cc.size(800, 10));
-        
-        // Right wall
-        this.addPlatform(cc.p(790, 50), cc.size(10, 750));
-        
-        // Middle platform
-        this.addPlatform(cc.p(250, 50), cc.size(300, 10));
-        
-        // End platform
-        this.addPlatform(cc.p(600, 50), cc.size(200, 10));
+        for( var i = 0; i < levels[this.currentLevel]["platforms"].length; i++ ){
+            this.addPlatform( levels[this.currentLevel]["platforms"][i] )
 
+        }
 
         // collisionhandler        
         space.addCollisionHandler(1, 2, this.collisionBottomBegin, null, null, null);
@@ -140,12 +124,12 @@ var HelloWorldLayer = cc.Layer.extend({
         cc.log('Win!');
     },
 
-    addPlatform : function(start, size) {
+    addPlatform : function( rect ) {
         var verts = [
-            start.x, start.y,
-            start.x, start.y + size.height,
-            start.x + size.width, start.y + size.height,
-            start.x + size.width, start.y
+            rect.x, rect.y,
+            rect.x, rect.y + rect.height,
+            rect.x + rect.width, rect.y + rect.height,
+            rect.x + rect.width, rect.y
         ];
 
     
@@ -155,7 +139,7 @@ var HelloWorldLayer = cc.Layer.extend({
         shape.setFriction(0.0);
         this.space.addStaticShape(shape);
 
-        this.drawNode.drawRect(start, cc.p(start.x + size.width, start.y + size.height), cc.color(255, 0, 0, 255), 1, cc.color(144, 0, 0 ,255));
+        this.drawNode.drawRect(cc.p(rect.x, rect.y), cc.p(rect.x + rect.width, rect.y + rect.height), cc.color(255, 0, 0, 255), 1, cc.color(144, 0, 0 ,255));
     },
 
     update:function (dt) {
@@ -186,4 +170,3 @@ var HelloWorldScene = cc.Scene.extend({
         this.addChild(layer);
     }
 });
-

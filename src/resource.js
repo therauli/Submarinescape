@@ -4,7 +4,7 @@ var res = {
     ellipsoid_png : "res/Ellipsoid.png",
     triangloid_png : "res/Triangloid.png",
     bacground_png : "res/Background.png",
-    end_point_png : "res/end.png"
+    end_point_png : "res/door.png",    
 };
 
 var g_resources = [];
