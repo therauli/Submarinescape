@@ -119,13 +119,13 @@ var HelloWorldLayer = cc.Layer.extend({
                      new cp.SegmentShape(staticBody, cp.v(0,winSize.height), cp.v(winSize.width,winSize.height), 1),
                      new cp.SegmentShape(staticBody, cp.v(0,0), cp.v(0,winSize.height), 1),
                      new cp.SegmentShape(staticBody, cp.v(winSize.width,0), cp.v(winSize.width,winSize.height), 1)];
-        
+
+        walls[0].setCollisionType(2);
         for (var i = 0; i < walls.length; i++) {
             var shape = walls[i];
             shape.setElasticity(1.0);
             shape.setFriction(0.0);
             space.addStaticShape(shape);
-            shape.setCollisionType(2);
         }
 
         //add collision tag for bottom wall
@@ -168,6 +168,7 @@ var HelloWorldLayer = cc.Layer.extend({
         shape.setElasticity(1.0);
         shape.setFriction(0.0);
         this.space.addStaticShape(shape);
+        cc.log('kkkkkkkkk');
         
 
         this.drawNode.drawRect(start, cc.p(start.x + size.width, start.y + size.height), cc.color(255, 0, 0, 255), 1, cc.color(144, 0, 0 ,255));

@@ -18,7 +18,6 @@ var Shapoid = cc.PhysicsSprite.extend({
 
         this.shape.setCollisionType(1);
 
-
     },
 
     applyImpulse : function(dir) {
