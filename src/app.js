@@ -88,14 +88,14 @@ var HelloWorldLayer = cc.Layer.extend({
         space.gravity = cp.v(0, -100);
 
         // collisionhandler        
-        space.addCollisionHandler(1, 2, this.collisionBottomBegin, null, null, null);
+        space.addCollisionHandler(1, 2, this.collisionBottomBegin.bind(this), null, null, null);
 
         // debug stuph
         this._debugNode = new cc.PhysicsDebugNode(space);
         this._debugNode.visible = true; //set this 
         this.addChild(this._debugNode, 1000);
 
-        space.addCollisionHandler(1, 3, this.collisionEndBegin, null, null, null);
+        space.addCollisionHandler(1, 3, this.collisionEndBegin.bind(this), null, null, null);
 
     },
 
@@ -127,17 +127,17 @@ var HelloWorldLayer = cc.Layer.extend({
         this.addChild(endPoint, 10);
     },
 
-    resetShapoid : function ()
-    {
+    resetShapoid : function () {
         this.startPoint = levels[this.currentLevel]["start"];
         this.shapoid.setPosition(this.startPoint);
         this.shapoid.getBody().resetForces();
+        this.shapoid.getBody().setVel(cp.vzero);
 
     },
 
     collisionBottomBegin : function(arbiter, space) {
-        this.resetShapoid();
         cc.log("doom");
+        this.resetShapoid();
     },
 
     collisionEndBegin : function(arbiter, space) {
