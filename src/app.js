@@ -13,21 +13,11 @@ var HelloWorldLayer = cc.Layer.extend({
         var size = cc.winSize;
 
         // add "HelloWorld" splash screen"
-        this.sprite = new cc.Sprite(res.HelloWorld_png);
-        this.sprite.attr({
-            x: size.width / 2,
-            y: size.height / 2,
-            scale: 0.5,
-            rotation: 180
-        });
+        this.sprite = new cc.Sprite(res.bacground_png);
         this.addChild(this.sprite, 0);
-
-        this.sprite.runAction(
-            cc.sequence(
-                cc.rotateTo(2, 0),
-                cc.scaleTo(2, 1, 1)
-            )
-        );
+        this.sprite.setOpacity( 150 );
+        this.sprite.setPosition(size.width / 2,
+                                size.height / 2 );
 
         cc.log('whee');
         this.shapoid = new Shapoid();
