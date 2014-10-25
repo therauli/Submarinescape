@@ -11,7 +11,7 @@ var HelloWorldLayer = cc.Layer.extend({
         this._super();
 
         var size = cc.winSize;
-
+        this.currentLevel = 0;
         this.sprite = new cc.Sprite(res.bacground_png);
         this.addChild(this.sprite, 0);
         this.sprite.setOpacity( 150 );
@@ -21,10 +21,10 @@ var HelloWorldLayer = cc.Layer.extend({
         cc.log('whee');
         this.shapoid = new Shapoid();
 
-        this.startPoint = cc.p(100, 200);
+        this.startPoint = levels[this.currentLevel]["start"];
         this.shapoid.setPosition(this.startPoint);
 
-        this.endPoint = cc.p(700, 100);
+        this.endPoint = levels[this.currentLevel]["end"];
 
         this.drawNode = new cc.DrawNode();
         this.addChild(this.drawNode, 50);
@@ -85,8 +85,8 @@ var HelloWorldLayer = cc.Layer.extend({
         // Gravity
         space.gravity = cp.v(0, -100);
 
-        for( var i = 0; i < levels[0]["platforms"].length; i++ ){
-            this.addPlatform( levels[0]["platforms"][i] )
+        for( var i = 0; i < levels[this.currentLevel]["platforms"].length; i++ ){
+            this.addPlatform( levels[this.currentLevel]["platforms"][i] )
 
         }
 
