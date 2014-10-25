@@ -137,6 +137,11 @@ var HelloWorldLayer = cc.Layer.extend({
         //add some platforms
         this.addPlatform(cc.p(0, 0), cc.size(300, 10)); 
 
+        // debug only
+        this._debugNode = new cc.PhysicsDebugNode(this.space);
+        this._debugNode.visible = true;
+        this.addChild(this._debugNode, 1000);
+
     },
 
     addPlatform : function(start, size) {
