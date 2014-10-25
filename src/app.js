@@ -39,9 +39,25 @@ var HelloWorldLayer = cc.Layer.extend({
 
                 //debug stuff only
                 if (keyCode == 32) {
-                    that.space.removeShape(that.shapoid.shape);
-                    that.shapoid.morphToEllipsoid();//Triangloid();
-                    that.space.addShape(that.shapoid.shape);
+                    switch( that.shapoid.type ) {
+                        case "triangloid" :
+                            cc.log('triangloid space');
+                            that.oldShape = that.shapoid.shape;
+                            that.shapoid.morphToCircloid();
+                            that.newShape = that.shapoid.shape;
+                            that.resetShapoid();                            
+                        break;
+                        case "ellipsoid":
+                            cc.log('ellipsoid space');
+                        break;
+                        default:
+                            cc.log('sumtin else');
+                        break;
+                    }
+
+                    //that.space.removeShape(that.shapoid.shape);
+                    //that.shapoid.morphToEllipsoid();//Triangloid();
+                    //that.space.addShape(that.shapoid.shape);
                 }
 
                 if (x !== 0) {
@@ -147,6 +163,7 @@ var HelloWorldLayer = cc.Layer.extend({
         this.startPoint = levels[this.currentLevel]["start"];
         this.shapoid.setPosition(this.startPoint);
         this.shapoid.getBody().resetForces();
+        this.shapoid.setRotation( 0 );
         this.shapoid.getBody().setVel(cp.vzero);
 
     },
@@ -179,17 +196,17 @@ var HelloWorldLayer = cc.Layer.extend({
     },
     
     collisionSugarPre : function(arbiter, space) {
-        //cc.log('suger pre');
+        cc.log('suger pre');
         return true;
     },
 
     collisionSugarSep : function(arbiter, space) {
-        //cc.log('sugar sepa');
+        cc.log('sugar sepa');
     },
       
 
     collisionSugarPost : function(arbiter, space) {
-        //
+        cc.log('Sugar post');
     },
 
     addPlatform : function( rect ) {
@@ -261,6 +278,7 @@ var HelloWorldLayer = cc.Layer.extend({
     },
 
     removeChildPhysics : function(obj) {
+        cc.log('Removing:', obj);
         this.removeChild(obj);
         this.space.removeBody(obj.getBody());
         this.space.removeShape(obj.shape);
