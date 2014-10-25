@@ -32,7 +32,7 @@ var HelloWorldLayer = cc.Layer.extend({
         cc.log('whee');
         this.shapoid = new Shapoid();
 
-        this.startPoint = cc.p(100, 100);
+        this.startPoint = cc.p(100, 200);
         this.shapoid.setPosition(this.startPoint);
 
         this.endPoint = cc.p(300, 100);
@@ -130,12 +130,19 @@ var HelloWorldLayer = cc.Layer.extend({
         space.addStaticShape(endPoint.shape);
         this.addChild(endPoint, 10);
 
+        space.addCollisionHandler(1, 3, this.collisionEndBegin, null, null, null);
+        cc.log('erete');
+
 
 
     },
 
     collisionBottomBegin : function(arbiter, space) {
         cc.log("doom");
+    },
+
+    collisionEndBegin : function(arbiter, space) {
+        cc.log('Win!');
     },
 
     addPlatform : function(start, size) {
