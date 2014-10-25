@@ -10,7 +10,7 @@ var HelloWorldLayer = cc.Layer.extend({
         this._super();
 
         var size = cc.winSize;
-        this.currentLevel = 0;
+        this.currentLevel = 1;
         this.sprite = new cc.Sprite(res.bacground_png);
         this.addChild(this.sprite, 0);
         this.sprite.setOpacity( 150 );
@@ -92,6 +92,8 @@ var HelloWorldLayer = cc.Layer.extend({
         this.addChild(this._debugNode, 1000);
 
         space.addCollisionHandler(1, 3, this.collisionEndBegin.bind(this), null, null, null);
+
+        space.addCollisionHandler(1, 5, this.collisionSugarBegin.bind(this), null, null, null);
        
     },
 
@@ -159,6 +161,13 @@ var HelloWorldLayer = cc.Layer.extend({
         var seq = cc.sequence(delay, call);
         this.runAction(seq);
         this.toRemove.push(this.shapoid);
+    },
+
+    collisionSugarBegin : function(arbiter, space) {
+        cc.log('NEED MOAR SUGAR');
+        this.space.removeShape(this.shapoid.shape);
+        this.shapoid.morphToTriangloid();
+        this.space.addShape(this.shapoid.shape);
     },
 
     addPlatform : function( rect ) {
