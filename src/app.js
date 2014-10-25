@@ -32,6 +32,11 @@ var HelloWorldLayer = cc.Layer.extend({
         cc.log('whee');
         this.shapoid = new Shapoid();
 
+        this.startPoint = cc.p(100, 100);
+        this.shapoid.setPosition(this.startPoint);
+
+        this.endPoint = cc.p(300, 100);
+
         this.drawNode = new cc.DrawNode();
         this.addChild(this.drawNode, 50);
         
@@ -104,6 +109,12 @@ var HelloWorldLayer = cc.Layer.extend({
         this._debugNode.visible = true; //set this 
         this.addChild(this._debugNode, 1000);
 
+        // endpoint
+        var endPoint = new EndPoint(staticBody, this.endPoint);
+        space.addStaticShape(endPoint.shape);
+        this.addChild(endPoint, 10);
+
+
 
     },
 
@@ -125,8 +136,6 @@ var HelloWorldLayer = cc.Layer.extend({
         shape.setElasticity(1.0);
         shape.setFriction(0.0);
         this.space.addStaticShape(shape);
-        cc.log('kkkkkkkkk');
-        
 
         this.drawNode.drawRect(start, cc.p(start.x + size.width, start.y + size.height), cc.color(255, 0, 0, 255), 1, cc.color(144, 0, 0 ,255));
     },

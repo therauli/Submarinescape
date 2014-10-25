@@ -1,10 +1,9 @@
 var res = {
     HelloWorld_png : "res/HelloWorld.png",
-    CloseNormal_png : "res/CloseNormal.png",
-    CloseSelected_png : "res/CloseSelected.png",
     shapoid_ball_png : "res/shapoid_ball.png",
     ellipsoid_png : "res/Ellipsoid.png",
-    triangloid_png : "res/Triangloid.png"
+    triangloid_png : "res/Triangloid.png",
+    end_point_png : "res/end.png"
 };
 
 var g_resources = [];
