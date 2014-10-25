@@ -135,10 +135,26 @@ var HelloWorldLayer = cc.Layer.extend({
         space.gravity = cp.v(0, -100);
 
         //add some platforms
-        this.addPlatform(cc.p(0, 0), cc.size(300, 10)); 
-
-        // collisionhandler
+        // Starting platform
+        this.addPlatform(cc.p(0, 50), cc.size(200, 10));
         
+        // Left wall
+        this.addPlatform(cc.p(0, 50), cc.size(10, 750));
+        
+        // Ceiling
+        this.addPlatform(cc.p(0, 440), cc.size(800, 10));
+        
+        // Right wall
+        this.addPlatform(cc.p(790, 50), cc.size(10, 750));
+        
+        // Middle platform
+        this.addPlatform(cc.p(250, 50), cc.size(300, 10));
+        
+        // End platform
+        this.addPlatform(cc.p(600, 50), cc.size(200, 10));
+
+
+        // collisionhandler        
         space.addCollisionHandler(1, 2, this.collisionBottomBegin, null, null, null);
         cc.log('ekk');
 
@@ -162,13 +178,13 @@ var HelloWorldLayer = cc.Layer.extend({
             start.x + size.width, start.y
         ];
 
-        cc.log(verts);
+    
         
         var shape = new cp.PolyShape(this.space.staticBody, verts, cp.vzero);
         shape.setElasticity(1.0);
         shape.setFriction(0.0);
         this.space.addStaticShape(shape);
-        cc.log('kkkkkkkkk');
+    
         
 
         this.drawNode.drawRect(start, cc.p(start.x + size.width, start.y + size.height), cc.color(255, 0, 0, 255), 1, cc.color(144, 0, 0 ,255));
