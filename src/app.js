@@ -3,6 +3,7 @@ var HelloWorldLayer = cc.Layer.extend({
     sprite: null,
     space: null,
     shapoid: null,
+    drawNode: null,
     ctor: function () {
         //////////////////////////////
         // 1. super init first
@@ -70,6 +71,9 @@ var HelloWorldLayer = cc.Layer.extend({
 
         cc.log('whee');
         this.shapoid = new Shapoid();
+
+        this.drawNode = new cc.DrawNode();
+        this.addChild(this.drawNode, 50);
         
         this.initPhysics(size);
         this.scheduleUpdate();
@@ -80,7 +84,7 @@ var HelloWorldLayer = cc.Layer.extend({
         cc.eventManager.addListener({
             event: cc.EventListener.KEYBOARD,
             onKeyPressed:  function(keyCode, event){
-                cc.log("Key " + (cc.sys.isNative ? that.getNativeKeyName(keyCode) : String.fromCharCode(keyCode) ) + "(" + keyCode.toString()  + ") was pressed!");
+                //cc.log("Key " + (cc.sys.isNative ? that.getNativeKeyName(keyCode) : String.fromCharCode(keyCode) ) + "(" + keyCode.toString()  + ") was pressed!");
                 var x = 0;
 
                 if (keyCode == 39) {
@@ -97,12 +101,11 @@ var HelloWorldLayer = cc.Layer.extend({
 
             },
             onKeyReleased: function(keyCode, event){
-                cc.log("Key " + (cc.sys.isNative ? that.getNativeKeyName(keyCode) : String.fromCharCode(keyCode) ) + "(" + keyCode.toString()  + ") was released!");
+                //cc.log("Key " + (cc.sys.isNative ? that.getNativeKeyName(keyCode) : String.fromCharCode(keyCode) ) + "(" + keyCode.toString()  + ") was released!");
                 that.shapoid.resetImpulse()
 
             }
         }, that);
-
 
         return true;
     },
@@ -112,10 +115,10 @@ var HelloWorldLayer = cc.Layer.extend({
 
         var staticBody = space.staticBody;
 
-        var walls = [new cp.SegmentShape(staticBody, cp.v(0,0), cp.v(winSize.width,0), 10),               // bottom
-                     new cp.SegmentShape(staticBody, cp.v(0,winSize.height), cp.v(winSize.width,winSize.height), 10),    // top
-                     new cp.SegmentShape(staticBody, cp.v(0,0), cp.v(0,winSize.height), 10),             // left
-                     new cp.SegmentShape(staticBody, cp.v(winSize.width,0), cp.v(winSize.width,winSize.height), 10)  // right
+        var walls = [new cp.SegmentShape(staticBody, cp.v(0,0), cp.v(winSize.width,0), 1),               // bottom
+                     new cp.SegmentShape(staticBody, cp.v(0,winSize.height), cp.v(winSize.width,winSize.height), 1),    // top
+                     new cp.SegmentShape(staticBody, cp.v(0,0), cp.v(0,winSize.height), 1),             // left
+                     new cp.SegmentShape(staticBody, cp.v(winSize.width,0), cp.v(winSize.width,winSize.height), 1)  // right
         ];
         
         for (var i = 0; i < walls.length; i++) {
@@ -129,6 +132,30 @@ var HelloWorldLayer = cc.Layer.extend({
         space.gravity = cp.v(0, -100);
 
         this.space = space;
+
+
+        //add some platforms
+        this.addPlatform(cc.p(0, 0), cc.size(300, 10)); 
+
+    },
+
+    addPlatform : function(start, size) {
+        var verts = [
+            start.x, start.y,
+            start.x, start.y + size.height,
+            start.x + size.width, start.y + size.height,
+            start.x + size.width, start.y
+        ];
+
+        cc.log(verts);
+        
+        var shape = new cp.PolyShape(this.space.staticBody, verts, cp.vzero);
+        shape.setElasticity(1.0);
+        shape.setFriction(0.0);
+        this.space.addStaticShape(shape);
+        
+
+        this.drawNode.drawRect(start, cc.p(start.x + size.width, start.y + size.height), cc.color(255, 0, 0, 255), 1, cc.color(144, 0, 0 ,255));
     },
 
     update:function (dt) {
