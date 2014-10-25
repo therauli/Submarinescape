@@ -3,10 +3,10 @@ var EndPoint = cc.PhysicsSprite.extend({
     ctor: function(staticBody, pos) {
         this._super();
         this.initWithFile(res.end_point_png);
-        cc.log('kkk');
+        cc.log('EndPoint', pos);
 
-        this.setBody(staticBody);
-        
+        this.setBody(staticBody);    
+
         this.setPosition(pos);
         
         var size = this.getContentSize();

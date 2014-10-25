@@ -23,6 +23,6 @@ var levels = [{	"name": "level1",
 			    "obstacles": [
 			  		cc.rect(390,60,10,200)
 			    ],
-			  	"sugar" : cc.p(370,65)
+			  	"sugar" : cc.p(370,370)
 			  }
 			 ];

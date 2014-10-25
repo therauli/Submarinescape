@@ -5,13 +5,12 @@ var HelloWorldLayer = cc.Layer.extend({
     shapoid: null,
     drawNode: null,
     startPoint: null,
-    endPoint: null,
     toRemove: [],
     ctor: function () {
         this._super();
 
         var size = cc.winSize;
-        this.currentLevel = 0;
+        this.currentLevel = 1;
         this.sprite = new cc.Sprite(res.bacground_png);
         this.addChild(this.sprite, 0);
         this.sprite.setOpacity( 150 );
@@ -122,9 +121,15 @@ var HelloWorldLayer = cc.Layer.extend({
         }
         cc.log('Obstacles, done');
 
+        // set sugar if any
+        if( levels[lvl]["sugar"] !== undefined ) {
+            var yellowSugar = new YellowSugar(this.space.staticBody, levels[lvl]["sugar"]);
+            space.addStaticShape( yellowSugar.shape );
+            this.addChild(yellowSugar, 100 );
+        }
+
         // endpoint
-        this.endPoint = levels[this.currentLevel]["end"]; 
-        var endPoint = new EndPoint(this.space.staticBody, this.endPoint);
+        var endPoint = new EndPoint(this.space.staticBody, levels[this.currentLevel]["end"]);
         space.addStaticShape(endPoint.shape);
         this.addChild(endPoint, 10);
     },
@@ -181,8 +186,6 @@ var HelloWorldLayer = cc.Layer.extend({
             rect.x + rect.width, rect.y + rect.height,
             rect.x + rect.width, rect.y
         ];
-
-    
         
         var shape = new cp.PolyShape(this.space.staticBody, verts, cp.vzero);
         shape.setElasticity(1.0);
@@ -223,6 +226,31 @@ var HelloWorldLayer = cc.Layer.extend({
     }
 
 
+});
+
+var YellowSugar = cc.PhysicsSprite.extend({
+    shape: null,
+    ctor: function(staticBody, pos) {
+        this._super();
+        this.initWithFile(res.yellow_sugar_png);
+        cc.log('YellowSugar', pos);
+   
+        this.setBody(staticBody);
+
+        this.setPosition(pos);
+                
+        var size = this.getContentSize();
+        cc.log('YellowSugar', size);
+
+        var rect = cc.rect(pos.x, pos.y, size.width, size.height);
+
+        var shape = new cp.BoxShape(staticBody, rect.width, rect.height);
+        shape.setCollisionType(5);
+
+        shape.setSensor(true);
+        this.shape = shape;
+ 
+    }
 });
 
 var HelloWorldScene = cc.Scene.extend({
