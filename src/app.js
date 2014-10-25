@@ -6,7 +6,7 @@ var HelloWorldLayer = cc.Layer.extend({
     drawNode: null,
     startPoint: null,
     endPoint: null,
-
+    toRemove: [],
     ctor: function () {
         this._super();
 
@@ -20,10 +20,6 @@ var HelloWorldLayer = cc.Layer.extend({
 
         cc.log('whee');
 
-        this.drawNode = new cc.DrawNode();
-        this.addChild(this.drawNode, 50);
-        
-        this.initPhysics(size);
         this.scheduleUpdate();
         
         var that = this;
@@ -57,6 +53,7 @@ var HelloWorldLayer = cc.Layer.extend({
 
             }
         }, that);
+
 
         this.loadLevel( this.currentLevel );
         return true;
@@ -96,13 +93,18 @@ var HelloWorldLayer = cc.Layer.extend({
         this.addChild(this._debugNode, 1000);
 
         space.addCollisionHandler(1, 3, this.collisionEndBegin.bind(this), null, null, null);
-
+       
     },
 
-    loadLevel : function( lvl )
-    {
+    loadLevel : function(lvl) {
+        this.initPhysics(cc.winSize);
+        
+        this.drawNode = new cc.DrawNode();
+        this.addChild(this.drawNode, 10);
+
         this.shapoid = new Shapoid();
         this.addChildPhysics(this.shapoid, 10);
+
         this.resetShapoid();
 
         // Setup platforms
@@ -128,6 +130,7 @@ var HelloWorldLayer = cc.Layer.extend({
     },
 
     resetShapoid : function () {
+        this.shapoid.setVisible(true);
         this.startPoint = levels[this.currentLevel]["start"];
         this.shapoid.setPosition(this.startPoint);
         this.shapoid.getBody().resetForces();
@@ -141,7 +144,16 @@ var HelloWorldLayer = cc.Layer.extend({
     },
 
     collisionEndBegin : function(arbiter, space) {
-        cc.log('Win!');
+        cc.log('win');
+        var delay = cc.DelayTime.create(1);
+        var call = cc.callFunc(function() {
+            this.currentLevel += 1;
+            this.loadLevel(this.currentLevel);
+            cc.log('Joo');
+        }, this);
+        var seq = cc.sequence(delay, call);
+        this.runAction(seq);
+        this.toRemove.push(this.shapoid);
     },
 
     addPlatform : function( rect ) {
@@ -185,6 +197,11 @@ var HelloWorldLayer = cc.Layer.extend({
         // chipmunk step
         this.space.step(1/60);
         this.shapoid.update(dt);
+        
+        for (var i = 0; i < this.toRemove.length; i += 1) {
+            this.removeChildPhysics(this.toRemove[i]);
+        }
+        this.toRemove = [];
     },
     
     addChildPhysics: function(obj, z) {
@@ -197,6 +214,12 @@ var HelloWorldLayer = cc.Layer.extend({
         this.space.addShape(obj.shape);
         
         
+    },
+
+    removeChildPhysics : function(obj) {
+        this.removeChild(obj);
+        this.space.removeBody(obj.getBody());
+        this.space.removeShape(obj.shape);
     }
 
 
