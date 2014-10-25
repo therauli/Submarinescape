@@ -6,6 +6,8 @@ var HelloWorldLayer = cc.Layer.extend({
     drawNode: null,
     startPoint: null,
     toRemove: [],
+    oldShape: null,
+    newSpage: null,
     ctor: function () {
         this._super();
 
@@ -93,7 +95,11 @@ var HelloWorldLayer = cc.Layer.extend({
 
         space.addCollisionHandler(1, 3, this.collisionEndBegin.bind(this), null, null, null);
 
-        space.addCollisionHandler(1, 5, this.collisionSugarBegin.bind(this), null, null, null);
+        space.addCollisionHandler(1, 5, this.collisionSugarBeg.bind(this), 
+                                        this.collisionSugarPre.bind(this), 
+                                        this.collisionSugarPost.bind(this),
+                                        this.collisionSugarSep.bind(this));
+        cc.log('gggggggggg');
        
     },
 
@@ -163,11 +169,27 @@ var HelloWorldLayer = cc.Layer.extend({
         this.toRemove.push(this.shapoid);
     },
 
-    collisionSugarBegin : function(arbiter, space) {
+
+    collisionSugarBeg : function(arbiter, space) {
         cc.log('NEED MOAR SUGAR');
-        this.space.removeShape(this.shapoid.shape);
+        this.oldShape = this.shapoid.shape;
         this.shapoid.morphToTriangloid();
-        this.space.addShape(this.shapoid.shape);
+        this.newShape = this.shapoid.shape;
+        return true;
+    },
+    
+    collisionSugarPre : function(arbiter, space) {
+        //cc.log('suger pre');
+        return true;
+    },
+
+    collisionSugarSep : function(arbiter, space) {
+        //cc.log('sugar sepa');
+    },
+      
+
+    collisionSugarPost : function(arbiter, space) {
+        //
     },
 
     addPlatform : function( rect ) {
@@ -214,6 +236,16 @@ var HelloWorldLayer = cc.Layer.extend({
             this.removeChildPhysics(this.toRemove[i]);
         }
         this.toRemove = [];
+
+        if (this.oldShape !== null) {
+            this.space.removeShape(this.oldShape);
+            this.space.addShape(this.newShape);
+            this.oldShape = null;
+            this.newShape = null;
+
+        }
+
+
     },
     
     addChildPhysics: function(obj, z) {
