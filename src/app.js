@@ -11,7 +11,7 @@ var HelloWorldLayer = cc.Layer.extend({
         this._super();
 
         var size = cc.winSize;
-        this.currentLevel = 1;
+        this.currentLevel = 0;
         this.sprite = new cc.Sprite(res.bacground_png);
         this.addChild(this.sprite, 0);
         this.sprite.setOpacity( 150 );
@@ -102,17 +102,8 @@ var HelloWorldLayer = cc.Layer.extend({
     loadLevel : function( lvl )
     {
         this.shapoid = new Shapoid();
-        this.startPoint = levels[this.currentLevel]["start"];
-        cc.log("diudiu", this.startPoint );
-        this.shapoid.setPosition(this.startPoint);
         this.addChildPhysics(this.shapoid, 10);
-
-        // endpoint
-        this.endPoint = levels[this.currentLevel]["end"]; 
-        var endPoint = new EndPoint(this.space.staticBody, this.endPoint);
-        space.addStaticShape(endPoint.shape);
-        this.addChild(endPoint, 10);
-
+        this.resetShapoid();
 
         // Setup platforms
         for( var i = 0; i < levels[lvl]["platforms"].length; i++ ){
@@ -129,9 +120,23 @@ var HelloWorldLayer = cc.Layer.extend({
         }
         cc.log('Obstacles, done');
 
+        // endpoint
+        this.endPoint = levels[this.currentLevel]["end"]; 
+        var endPoint = new EndPoint(this.space.staticBody, this.endPoint);
+        space.addStaticShape(endPoint.shape);
+        this.addChild(endPoint, 10);
+    },
+
+    resetShapoid : function ()
+    {
+        this.startPoint = levels[this.currentLevel]["start"];
+        this.shapoid.setPosition(this.startPoint);
+        this.shapoid.getBody().resetForces();
+
     },
 
     collisionBottomBegin : function(arbiter, space) {
+        this.resetShapoid();
         cc.log("doom");
     },
 
