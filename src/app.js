@@ -41,11 +41,11 @@ var HelloWorldLayer = cc.Layer.extend({
             onKeyPressed: function(keyCode, event){
                 var x = 0;
                 if (keyCode == 39) {
-                    x = 100;
+                    x = 1;
                 }
 
                 if (keyCode == 37) {
-                    x = -100;
+                    x = -1;
                 }
                 var dir = cp.v(x, 0);
 
@@ -56,8 +56,9 @@ var HelloWorldLayer = cc.Layer.extend({
                     that.space.addShape(that.shapoid.shape);
                 }
 
-
-                that.shapoid.applyImpulse(dir);
+                if (x !== 0) {
+                    that.shapoid.handleMove(dir);
+                }
 
             },
             onKeyReleased: function(keyCode, event){

@@ -40,11 +40,36 @@ var Shapoid = cc.PhysicsSprite.extend({
 
     update : function(dt) {
         if (this.type === "triangloid") {
-            this.getBody().applyForce(cp.v(0, 20), cp.vzero);
+            var angle = this.getRotation();
+            var dir = cp.v(Math.cos((90 - angle) * Math.PI / 180) * 30, Math.sin((90 - angle) * Math.PI / 180) * 30);
+            //console.log(dir.x, dir.y);
+            var body = this.getBody();
+            var vel = body.getVel();
+            var l = Math.sqrt(Math.pow(vel.x, 2) + Math.pow(vel.y, 2));  
+            //console.log(l)
+            if (l < 100) { 
+                body.applyForce(dir, cp.vzero);
+            } else {
+                dir = cp.v(dir.x / 30, dir.y / 30);
+                body.setVel(cp.v(dir.x * l, dir.y * l));
+            }
         }
         
     },
+    
+    handleMove: function(dir) {
+        if (this.type === "circloid") {
+            this.applyImpulse(cc.pMult(dir, 100));
+            cc.log('moving');
+        }
+        
+        if (this.type === "triangloid") {
+            var angle = this.getRotation() + dir.x * 8;
+            this.setRotation(angle);
+            
+        }
 
+    },
 
     applyImpulse : function(dir) {
         var body = this.getBody();
@@ -59,9 +84,11 @@ var Shapoid = cc.PhysicsSprite.extend({
     },
 
     resetImpulse: function() {
-        var body = this.getBody();
-        var vel = body.getVel();
-        body.setVel(cp.v(0, vel.y));
+        if (this.type === "circloid") {
+            var body = this.getBody();
+            var vel = body.getVel();
+            body.setVel(cp.v(0, vel.y));
+        }
     },
 
     getType : function() {
