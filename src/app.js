@@ -10,7 +10,7 @@ var HelloWorldLayer = cc.Layer.extend({
         this._super();
 
         var size = cc.winSize;
-        this.currentLevel = 1;
+        this.currentLevel = 0;
         this.sprite = new cc.Sprite(res.bacground_png);
         this.addChild(this.sprite, 0);
         this.sprite.setOpacity( 150 );
@@ -228,23 +228,26 @@ var HelloWorldLayer = cc.Layer.extend({
 
 });
 
-var YellowSugar = cc.PhysicsSprite.extend({
+var YellowSugar = cc.Sprite.extend({
     shape: null,
     ctor: function(staticBody, pos) {
         this._super();
         this.initWithFile(res.yellow_sugar_png);
         cc.log('YellowSugar', pos);
    
-        this.setBody(staticBody);
-
-        this.setPosition(pos);
-                
         var size = this.getContentSize();
+        
+        var verts = [pos.x - size.width / 2, pos.y - size.height / 2,
+                    pos.x - size.width / 2, pos.y + size.height / 2,
+                    pos.x - size.width / 2+ size.width, pos.y + size.height / 2,
+                    pos.x + size.width / 2, pos.y - size.height / 2];
+
+
         cc.log('YellowSugar', size);
 
-        var rect = cc.rect(pos.x, pos.y, size.width, size.height);
+        this.setPosition(pos);
 
-        var shape = new cp.BoxShape(staticBody, rect.width, rect.height);
+        var shape = new cp.PolyShape(staticBody, verts, cp.vzero);
         shape.setCollisionType(5);
 
         shape.setSensor(true);

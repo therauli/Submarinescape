@@ -1,20 +1,21 @@
-var EndPoint = cc.PhysicsSprite.extend({
+var EndPoint = cc.Sprite.extend({
     shape: null,
     ctor: function(staticBody, pos) {
         this._super();
         this.initWithFile(res.end_point_png);
         cc.log('EndPoint', pos);
 
-        this.setBody(staticBody);    
-
-        this.setPosition(pos);
-        
         var size = this.getContentSize();
 
-        var rect = cc.rect(pos.x, pos.y, size.width, size.height);
+        var verts = [pos.x - size.width / 2, pos.y - size.height / 2,
+                    pos.x - size.width / 2, pos.y + size.height / 2,
+                    pos.x - size.width / 2+ size.width, pos.y + size.height / 2,
+                    pos.x + size.width / 2, pos.y - size.height / 2];
 
-        var shape = new cp.BoxShape(staticBody, rect.width, rect.height);
+        var shape = new cp.PolyShape(staticBody, verts, cp.vzero);
         shape.setCollisionType(3);
+
+        this.setPosition(pos);
 
         shape.setSensor(true);
         this.shape = shape;
