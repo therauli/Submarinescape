@@ -40,15 +40,24 @@ var HelloWorldLayer = cc.Layer.extend({
             onKeyPressed: function(keyCode, event){
                 var x = 0;
                 if (keyCode == 39) {
-                    x = 100;
+                    x = 1;
                 }
 
                 if (keyCode == 37) {
-                    x = -100;
+                    x = -1;
                 }
                 var dir = cp.v(x, 0);
 
-                that.shapoid.applyImpulse(dir);
+                //debug stuff only
+                if (keyCode == 32) {
+                    that.space.removeShape(that.shapoid.shape);
+                    that.shapoid.morphToTriangloid();
+                    that.space.addShape(that.shapoid.shape);
+                }
+
+                if (x !== 0) {
+                    that.shapoid.handleMove(dir);
+                }
 
             },
             onKeyReleased: function(keyCode, event){
@@ -103,7 +112,6 @@ var HelloWorldLayer = cc.Layer.extend({
 
         // collisionhandler        
         space.addCollisionHandler(1, 2, this.collisionBottomBegin, null, null, null);
-        cc.log('ekk');
 
         // debug stuph
         this._debugNode = new cc.PhysicsDebugNode(space);
@@ -116,9 +124,6 @@ var HelloWorldLayer = cc.Layer.extend({
         this.addChild(endPoint, 10);
 
         space.addCollisionHandler(1, 3, this.collisionEndBegin, null, null, null);
-        cc.log('erete');
-
-
 
     },
 
@@ -170,6 +175,7 @@ var HelloWorldLayer = cc.Layer.extend({
     update:function (dt) {
         // chipmunk step
         this.space.step(1/60);
+        this.shapoid.update(dt);
     },
     
     addChildPhysics: function(obj, z) {
