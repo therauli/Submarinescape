@@ -57,6 +57,8 @@ var HelloWorldLayer = cc.Layer.extend({
 
 
         this.loadLevel( this.currentLevel );
+        cc.audioEngine.playMusic(res.song_ogg, true);
+
         return true;
     },
     

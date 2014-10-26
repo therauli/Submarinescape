@@ -5,7 +5,8 @@ var res = {
     triangloid_png : "res/Triangloid.png",
     bacground_png : "res/Background.png",
     end_point_png : "res/door.png",
-    yellow_sugar_png : "res/YellowSugar.png"
+    yellow_sugar_png : "res/YellowSugar.png",
+    song_ogg : "res/song.ogg"
 };
 
 var g_resources = [];
