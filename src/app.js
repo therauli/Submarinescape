@@ -6,6 +6,9 @@ var HelloWorldLayer = cc.Layer.extend({
     drawNode: null,
     startPoint: null,
     toRemove: [],
+    toRemoveStatic: [],
+    toAddShape: [],
+    toAddBody: [],
     oldShape: null,
     newSpage: null,
     ctor: function () {
@@ -116,7 +119,11 @@ var HelloWorldLayer = cc.Layer.extend({
                                         this.collisionSugarPost.bind(this),
                                         this.collisionSugarSep.bind(this));
 
-        cc.log('kkk');
+        space.addCollisionHandler(1, 6, this.collisionPipeBeg.bind(this),
+                                        this.collisionPipePre.bind(this), 
+                                        this.collisionPipePost.bind(this),
+                                        null);
+
         space.addCollisionHandler(1, 10, this.collisionPlatformBegin.bind(this), null, null, null);
 
         // debug stuph
@@ -245,6 +252,55 @@ var HelloWorldLayer = cc.Layer.extend({
         return true;
     },
 
+    collisionPipeBeg : function(arbiter, space) {
+        cc.log('pipe begin');
+        return true;
+    },
+
+    collisionPipePre : function(arbiter, space) {
+        cc.log('pipe pre');
+        return true;
+    },
+
+    collisionPipePost : function(arbiter, space) {
+        cc.log('post pipe');
+
+        if (this.shapoid.getType() !== "triangloid") {
+            cc.log("Wring type");
+            return;
+        }
+
+
+        console.log(arbiter);
+
+        var a = arbiter.getA();
+        var b = arbiter.getB();
+
+        var pipe = a.collision_type == 6 ? a : b;
+        var body = pipe.getBody();
+        
+        if (!body.isStatic()) {
+            cc.log('pipe is not static');
+            return;
+        }
+
+
+        
+        cc.log('bb', body);
+        
+        body.nodeIdleTime = 0;
+        body.setMass(100);
+        
+        this.toRemoveStatic.push(pipe);
+
+        this.toAddShape.push(pipe);
+        this.toAddBody.push(body);
+
+        cc.log(pipe);
+
+        
+    },
+
     addPlatform : function( rect ) {
         var verts = [
             rect.x, rect.y,
@@ -258,7 +314,6 @@ var HelloWorldLayer = cc.Layer.extend({
         shape.setFriction(0.0);
         shape.setCollisionType(10);
         this.space.addStaticShape(shape);
-
 
         this.drawNode.drawRect(cc.p(rect.x, rect.y), cc.p(rect.x + rect.width, rect.y + rect.height), cc.color(255, 0, 0, 255), 1, cc.color(144, 0, 0 ,255));
     },
@@ -305,9 +360,33 @@ var HelloWorldLayer = cc.Layer.extend({
             this.space.addShape(this.newShape);
             this.oldShape = null;
             this.newShape = null;
-
         }
 
+        for (i = 0; i < this.toRemoveStatic.length; i += 1) {
+            this.space.removeStaticShape(this.toRemoveStatic[i]);
+        }
+
+        this.toRemoveStatic = [];
+
+        for (i = 0; i < this.toAddShape.length; i += 1) {
+            var shape = this.toAddShape[i];
+            shape.setElasticity(0.5);
+            shape.setFriction(0.5);
+            this.space.addShape(shape);
+        }
+
+        this.toAddShape = [];
+
+        for (i = 0; i < this.toAddBody.length; i += 1) {
+            var body = this.toAddBody[i];
+            this.space.addBody(body);
+            var a = this.shapoid.getPosition();
+            var p = body.p;
+            body.applyImpulse(cp.v((p.x - a.x) * 1000, (p.y - a.y) * 1000), cp.vzero);
+            
+        }
+
+        this.toAddBody = [];
 
     },
     
