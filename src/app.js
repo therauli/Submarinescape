@@ -211,6 +211,7 @@ var HelloWorldLayer = cc.Layer.extend({
         this.shapoid.getBody().resetForces();
         this.shapoid.setRotation( 0 );
         this.shapoid.getBody().setVel(cp.vzero);
+        this.shapoid.morphToCircloid();
 
     },
 
@@ -343,8 +344,6 @@ var HelloWorldLayer = cc.Layer.extend({
             return;
         }
 
-
-        
         cc.log('bb', body);
         
         body.nodeIdleTime = 0;
