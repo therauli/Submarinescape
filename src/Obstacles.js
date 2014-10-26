@@ -8,19 +8,28 @@ var Pipe = cc.PhysicsSprite.extend({
 
         var size = this.getContentSize();
         
-        var verts = [pos.x - size.width / 2, pos.y - size.height / 2,
-                    pos.x - size.width / 2, pos.y + size.height / 2,
-                    pos.x - size.width / 2+ size.width, pos.y + size.height / 2,
-                    pos.x + size.width / 2, pos.y - size.height / 2];
+        var verts = [-size.width / 2, -size.height / 2,
+                     -size.width / 2, size.height / 2,
+                      size.width / 2, size.height / 2,
+                      size.width / 2, -size.height / 2];
 
         cc.log('Pipe verts:', verts);
 
-        this.body = new cp.Body(1000, cp.momentForBox(1000, size.width, size.height));
+        cc.log(size.width, size.height);
+
+        
+
+        this.body = new cp.Body(9999999, cp.momentForBox(999999, size.width, size.height));
+        
+        this.body.nodeIdleTime = Infinity;
+
         this.shape = new cp.PolyShape(this.body, verts, cp.vzero);
+
         this.shape.setElasticity(1.0);
         this.shape.setFriction(0.1);
 
         this.setBody(this.body);
+        this.setPosition(pos);
 
         this.shape.setCollisionType(6);
 

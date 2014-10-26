@@ -283,7 +283,9 @@ var HelloWorldLayer = cc.Layer.extend({
     addPipe : function( pos ) {        
         cc.log('Adding pipe:', pos);
         var pipe = new Pipe(pos);
-        this.addChildPhysics(pipe, 10);
+        //this.addChildPhysics(pipe, 10);
+        this.addChild(pipe, 10);
+        this.space.addStaticShape(pipe.shape);
         pipe.setVisible(true);
         pipe.getBody().resetForces();
     },
@@ -315,7 +317,6 @@ var HelloWorldLayer = cc.Layer.extend({
         cc.log('Adding', obj);
         
         this.space.addBody(obj.body);
-
         this.space.addShape(obj.shape);
         
         
