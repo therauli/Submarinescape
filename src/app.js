@@ -88,22 +88,20 @@ var HelloWorldLayer = cc.Layer.extend({
             var shape = walls[i];
             shape.setElasticity(1.0);
             shape.setFriction(0.0);
+            shape.setCollisionType(10);
             space.addStaticShape(shape);
+            
         }
 
         //add collision tag for bottom wall
         walls[0].setCollisionType(2);
+
         
         // Gravity
         space.gravity = cp.v(0, -100);
 
         // collisionhandler        
         space.addCollisionHandler(1, 2, this.collisionBottomBegin.bind(this), null, null, null);
-
-        // debug stuph
-        this._debugNode = new cc.PhysicsDebugNode(space);
-        this._debugNode.visible = true; //set this 
-        this.addChild(this._debugNode, 1000);
 
         space.addCollisionHandler(1, 3, this.collisionEndBegin.bind(this), null, null, null);
 
@@ -127,13 +125,23 @@ var HelloWorldLayer = cc.Layer.extend({
 
     loadLevel : function(lvl) {
 
+        cc.log(lvl, levels.length);
+        if (lvl >= levels.length) {
+            var label = cc.LabelTTF.create("YOU WIN GAME!!!!", "Arial", 35);
+            this.addChild(label, 1000);
+            label.setPosition(cc.winSize.width / 2, - 50);
+            label.runAction(cc.MoveTo.create(3, cc.p(cc.winSize.width / 2, cc.winSize.height / 2)));
+         
+            return;
+        }
+
         var backgroundSize = cc.winSize;
         this.sprite = new cc.Sprite(res.bacground_png);
         this.addChild(this.sprite, 0);
         this.sprite.setOpacity( 150 );
         this.sprite.setPosition(backgroundSize.width / 2,
                                 backgroundSize.height / 2 );
-
+        
         this.initPhysics(cc.winSize);
         
         this.drawNode = new cc.DrawNode();
@@ -275,6 +283,17 @@ var HelloWorldLayer = cc.Layer.extend({
 
     collisionRedSugarPost : function(arbiter, space) {
         cc.log('Red sugar post');
+
+    collisionPlatformBegin : function(arbiter, space) {
+        cc.log('bounce');
+        if (this.shapoid.getType() === "circloid") {
+            cc.audioEngine.playEffect(res.bounce_ogg);
+            var scaleBig = cc.ScaleTo.create(0.05, 1.5, 1.0);
+            var scaleBack = cc.ScaleTo.create(0.05, 1.0, 1.0);
+            this.shapoid.runAction(cc.sequence(scaleBig, scaleBack).repeat(2));
+        }
+
+        return true;
     },
 
     addPlatform : function( rect ) {
@@ -284,13 +303,13 @@ var HelloWorldLayer = cc.Layer.extend({
             rect.x + rect.width, rect.y + rect.height,
             rect.x + rect.width, rect.y
         ];
-
-    
         
         var shape = new cp.PolyShape(this.space.staticBody, verts, cp.vzero);
         shape.setElasticity(1.0);
         shape.setFriction(0.0);
+        shape.setCollisionType(10);
         this.space.addStaticShape(shape);
+
 
         this.drawNode.drawRect(cc.p(rect.x, rect.y), cc.p(rect.x + rect.width, rect.y + rect.height), cc.color(255, 0, 0, 255), 1, cc.color(144, 0, 0 ,255));
     },
