@@ -202,17 +202,17 @@ var HelloWorldLayer = cc.Layer.extend({
     },
     
     collisionSugarPre : function(arbiter, space) {
-        cc.log('suger pre');
+        //cc.log('suger pre');
         return true;
     },
 
     collisionSugarSep : function(arbiter, space) {
-        cc.log('sugar sepa');
+        //cc.log('sugar sepa');
     },
       
 
     collisionSugarPost : function(arbiter, space) {
-        cc.log('Sugar post');
+        //cc.log('Sugar post');
     },
 
     collisionPlatformBegin : function(arbiter, space) {
