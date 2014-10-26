@@ -25,7 +25,7 @@ var levels = [{	"name": "level1",
                     cc.p(415, 195)
 			    ],
 			  	"yellowSugar" : cc.p(300,80)
-			  },
+			  }/*,
 			  { "name": "level3",
 			    "start": cc.p(100,200),
 				"end": cc.p(700, 300),
@@ -43,5 +43,5 @@ var levels = [{	"name": "level1",
 				"yellowSugar": cc.p(100, 80),
 				"blueSugar": cc.p(100, 400),
 				"redSugar": cc.p(200, 80)
-			   }
+			   }*/
 			];
