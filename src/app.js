@@ -14,14 +14,8 @@ var HelloWorldLayer = cc.Layer.extend({
     ctor: function () {
         this._super();
 
-        var size = cc.winSize;
-        this.currentLevel = 1;
-        this.sprite = new cc.Sprite(res.bacground_png);
-        this.addChild(this.sprite, 0);
-        this.sprite.setOpacity( 150 );
-        this.sprite.setPosition(size.width / 2,
-                                size.height / 2 );
-
+        this.currentLevel = 0;
+        
         cc.log('whee');
 
         this.scheduleUpdate();
@@ -114,11 +108,6 @@ var HelloWorldLayer = cc.Layer.extend({
 
         space.addCollisionHandler(1, 3, this.collisionEndBegin.bind(this), null, null, null);
 
-        space.addCollisionHandler(1, 5, this.collisionSugarBeg.bind(this), 
-                                        this.collisionSugarPre.bind(this), 
-                                        this.collisionSugarPost.bind(this),
-                                        this.collisionSugarSep.bind(this));
-
         space.addCollisionHandler(1, 6, this.collisionPipeBeg.bind(this),
                                         this.collisionPipePre.bind(this), 
                                         this.collisionPipePost.bind(this),
@@ -126,14 +115,30 @@ var HelloWorldLayer = cc.Layer.extend({
 
         space.addCollisionHandler(1, 10, this.collisionPlatformBegin.bind(this), null, null, null);
 
+        space.addCollisionHandler(1, 5, this.collisionYellowSugarBeg.bind(this), 
+                                        this.collisionYellowSugarPre.bind(this), 
+                                        this.collisionYellowSugarPost.bind(this),
+                                        this.collisionYellowSugarSep.bind(this));
+
+         space.addCollisionHandler(1, 7, this.collisionBlueSugarBeg.bind(this), 
+                                         this.collisionBlueSugarPre.bind(this), 
+                                         this.collisionBlueSugarPost.bind(this),
+                                         this.collisionBlueSugarSep.bind(this));
+
+         space.addCollisionHandler(1, 8, this.collisionRedSugarBeg.bind(this), 
+                                         this.collisionRedSugarPre.bind(this), 
+                                         this.collisionRedSugarPost.bind(this),
+                                         this.collisionRedSugarSep.bind(this));
         // debug stuph
         this._debugNode = new cc.PhysicsDebugNode(space);
         this._debugNode.visible = true; //set this 
         this.addChild(this._debugNode, 1000);       
+
+       
     },
 
     loadLevel : function(lvl) {
-        
+
         cc.log(lvl, levels.length);
         if (lvl >= levels.length) {
             var label = cc.LabelTTF.create("YOU WIN GAME!!!!", "Arial", 35);
@@ -143,6 +148,13 @@ var HelloWorldLayer = cc.Layer.extend({
          
             return;
         }
+
+        var backgroundSize = cc.winSize;
+        this.sprite = new cc.Sprite(res.bacground_png);
+        this.addChild(this.sprite, 0);
+        this.sprite.setOpacity( 150 );
+        this.sprite.setPosition(backgroundSize.width / 2,
+                                backgroundSize.height / 2 );
         
         this.initPhysics(cc.winSize);
         
@@ -160,14 +172,7 @@ var HelloWorldLayer = cc.Layer.extend({
 
         }
         cc.log('Platforms, done');
-/*
-        // setup obstacles if any        
-        if( levels[lvl]["obstacles"] !== undefined ) {        
-            for( var i = 0; i < levels[lvl]["obstacles"].length; i++ ){
-                this.addObstacle( levels[lvl]["obstacles"][i] )
-            }
-        }
-        */
+
         if( levels[lvl]["obstacles"] !== undefined ) {
             for( var i = 0 ; i < levels[lvl]["obstacles"].length; i++ ) {
                 this.addPipe( levels[lvl]["obstacles"][i] )
@@ -177,10 +182,20 @@ var HelloWorldLayer = cc.Layer.extend({
         cc.log('Obstacles, done');
 
         // set sugar if any
-        if( levels[lvl]["sugar"] !== undefined ) {
-            var yellowSugar = new YellowSugar(this.space.staticBody, levels[lvl]["sugar"]);
+        if( levels[lvl]["yellowSugar"] !== undefined ) {
+            var yellowSugar = new YellowSugar(this.space.staticBody, levels[lvl]["yellowSugar"]);
             space.addStaticShape( yellowSugar.shape );
             this.addChild(yellowSugar, 100 );
+        }
+        if( levels[lvl]["blueSugar"] !== undefined ) {
+            var blueSugar = new BlueSugar(this.space.staticBody, levels[lvl]["blueSugar"]);
+            space.addStaticShape( blueSugar.shape );
+            this.addChild(blueSugar, 100 );
+        }
+        if( levels[lvl]["redSugar"] !== undefined ) {
+            var redSugar = new RedSugar(this.space.staticBody, levels[lvl]["redSugar"]);
+            space.addStaticShape( redSugar.shape );
+            this.addChild(redSugar, 100 );
         }
 
         // endpoint
@@ -218,27 +233,70 @@ var HelloWorldLayer = cc.Layer.extend({
     },
 
 
-    collisionSugarBeg : function(arbiter, space) {
-        cc.log('NEED MOAR SUGAR');
+    collisionYellowSugarBeg : function(arbiter, space) {
+        cc.log('Yellow sugar beg');
         this.oldShape = this.shapoid.shape;
         this.shapoid.morphToTriangloid();
         this.newShape = this.shapoid.shape;
         return true;
     },
     
-    collisionSugarPre : function(arbiter, space) {
-        //cc.log('suger pre');
+    collisionYellowSugarPre : function(arbiter, space) {
+        cc.log('Yellow sugar pre');
         return true;
     },
 
-    collisionSugarSep : function(arbiter, space) {
-        //cc.log('sugar sepa');
+    collisionYellowSugarSep : function(arbiter, space) {
+        cc.log('Yellow sugar sepa');
     },
       
 
-    collisionSugarPost : function(arbiter, space) {
-        //cc.log('Sugar post');
+    collisionYellowSugarPost : function(arbiter, space) {
+        cc.log('Yellow sugar post');
     },
+
+    collisionBlueSugarBeg : function(arbiter, space) {
+        cc.log('Blue sugar beg');
+        this.oldShape = this.shapoid.shape;
+        this.shapoid.morphToEllipsoid();
+        this.newShape = this.shapoid.shape;
+        return true;
+    },
+    
+    collisionBlueSugarPre : function(arbiter, space) {
+        cc.log('Blue sugar pre');
+        return true;
+    },
+
+    collisionBlueSugarSep : function(arbiter, space) {
+        cc.log('Blue sugar sepa');
+    },
+      
+
+    collisionBlueSugarPost : function(arbiter, space) {
+        cc.log('Blue sugar post');
+    },
+
+    collisionRedSugarBeg : function(arbiter, space) {
+        cc.log('Redlue sugar beg');
+        this.oldShape = this.shapoid.shape;
+        this.shapoid.morphToCircloid();
+        this.newShape = this.shapoid.shape;
+        return true;
+    },
+    
+    collisionRedSugarPre : function(arbiter, space) {
+        cc.log('Red sugar pre');
+        return true;
+    },
+
+    collisionRedSugarSep : function(arbiter, space) {
+        cc.log('Red sugar sepa');
+    },
+      
+
+    collisionRedSugarPost : function(arbiter, space) {
+        cc.log('Red sugar post');
 
     collisionPlatformBegin : function(arbiter, space) {
         cc.log('bounce');
@@ -433,6 +491,61 @@ var YellowSugar = cc.Sprite.extend({
 
         var shape = new cp.PolyShape(staticBody, verts, cp.vzero);
         shape.setCollisionType(5);
+
+        shape.setSensor(true);
+        this.shape = shape;
+ 
+    }
+});
+
+var BlueSugar = cc.Sprite.extend({
+    shape: null,
+    ctor: function(staticBody, pos) {
+        this._super();
+        this.initWithFile(res.blue_sugar_png);
+        cc.log('BlueSugar', pos);
+   
+        var size = this.getContentSize();
+        
+        var verts = [pos.x - size.width / 2, pos.y - size.height / 2,
+                    pos.x - size.width / 2, pos.y + size.height / 2,
+                    pos.x - size.width / 2+ size.width, pos.y + size.height / 2,
+                    pos.x + size.width / 2, pos.y - size.height / 2];
+
+
+        cc.log('BlueSugar', size);
+
+        this.setPosition(pos);
+
+        var shape = new cp.PolyShape(staticBody, verts, cp.vzero);
+        shape.setCollisionType(7);
+
+        shape.setSensor(true);
+        this.shape = shape; 
+    }
+});
+
+var RedSugar = cc.Sprite.extend({
+    shape: null,
+    ctor: function(staticBody, pos) {
+        this._super();
+        this.initWithFile(res.red_sugar_png);
+        cc.log('RedSugar', pos);
+   
+        var size = this.getContentSize();
+        
+        var verts = [pos.x - size.width / 2, pos.y - size.height / 2,
+                    pos.x - size.width / 2, pos.y + size.height / 2,
+                    pos.x - size.width / 2+ size.width, pos.y + size.height / 2,
+                    pos.x + size.width / 2, pos.y - size.height / 2];
+
+
+        cc.log('RedSugar', size);
+
+        this.setPosition(pos);
+
+        var shape = new cp.PolyShape(staticBody, verts, cp.vzero);
+        shape.setCollisionType(8);
 
         shape.setSensor(true);
         this.shape = shape;
