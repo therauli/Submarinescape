@@ -131,7 +131,7 @@ var HelloWorldLayer = cc.Layer.extend({
                                          this.collisionRedSugarSep.bind(this));
         // debug stuph
         this._debugNode = new cc.PhysicsDebugNode(space);
-        this._debugNode.visible = true; //set this 
+        this._debugNode.visible = false; //set this 
         this.addChild(this._debugNode, 1000);       
 
        
@@ -211,6 +211,8 @@ var HelloWorldLayer = cc.Layer.extend({
         this.shapoid.getBody().resetForces();
         this.shapoid.setRotation( 0 );
         this.shapoid.getBody().setVel(cp.vzero);
+        this.shapoid.getBody().setAngVel(0);
+        this.shapoid.getBody().setAngle(0);
         this.oldShape = this.shapoid.shape;
         this.shapoid.morphToCircloid();
         this.newShape = this.shapoid.shape;
