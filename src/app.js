@@ -296,7 +296,8 @@ var HelloWorldLayer = cc.Layer.extend({
         this.toAddShape.push(pipe);
         this.toAddBody.push(body);
 
-        cc.log(pipe);
+
+        this.resetShapoid();
 
         
     },
