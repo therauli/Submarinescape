@@ -7,7 +7,9 @@ var res = {
     end_point_png : "res/door.png",
     yellow_sugar_png : "res/YellowSugar.png",
     song_ogg : "res/song.ogg",
-    pipe_png : "res/Pipe.png"
+    pipe_png : "res/Pipe.png",
+    blue_sugar_png: "res/BlueSugar.png",
+    red_sugar_png: "res/RedSugar.png"
 };
 
 var g_resources = [];

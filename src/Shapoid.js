@@ -73,6 +73,7 @@ var Shapoid = cc.PhysicsSprite.extend({
                     ];
 
         this.shape = new cp.PolyShape(this.body, verts, cp.vzero);
+        this.shape.setCollisionType(1);
         this.getBody().resetForces();
 
     },
