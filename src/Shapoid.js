@@ -22,6 +22,21 @@ var Shapoid = cc.PhysicsSprite.extend({
 
     },
 
+    morphToCircloid : function() {
+        this.type = "circloid";
+        cc.log('new type is:', this.type );
+        cc.textureCache.addImage(res.shapoid_ball_png);
+        this.setTexture(cc.textureCache.getTextureForKey(res.shapoid_ball_png));
+
+        this.shape = new cp.CircleShape(this.body, 10, cp.vzero);
+        this.shape.setElasticity(1.0);
+        this.shape.setFriction(0.0);
+
+        this.shape.setCollisionType(1);
+
+        this.getBody().resetForces();
+    },
+
     morphToTriangloid : function() {
         this.type = "triangloid";
         cc.log('new type is', this.type);
@@ -34,6 +49,7 @@ var Shapoid = cc.PhysicsSprite.extend({
                      10, -10,
         ];
         this.shape = new cp.PolyShape(this.body, verts, cp.vzero);
+        this.shape.setCollisionType(1);
         this.getBody().resetForces();
         
     },
@@ -116,6 +132,13 @@ var Shapoid = cc.PhysicsSprite.extend({
 
     getType : function() {
         return this.type;
+    },
+
+    blowUp : function() {
+        if(this.type == "triangloid")
+        {
+            //Blow up!
+        }
     }
 
     
