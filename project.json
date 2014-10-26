@@ -14,7 +14,9 @@
         "src/resource.js",
         "src/shapoid.js",
         "src/endpoint.js",
+        "src/Obstacles.js",
         "src/app.js",
         "src/levels.js"
+
     ]
 }

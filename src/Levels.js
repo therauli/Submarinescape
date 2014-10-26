@@ -21,8 +21,8 @@ var levels = [{	"name": "level1",
 					cc.rect(790,50,10,750) // right wall					
 			  	],
 			    "obstacles": [
-			  		cc.rect(390,60,10,200)
+			  		cc.p(415,150)
 			    ],
-			  	"sugar" : cc.p(370,80)
+			  	"sugar" : cc.p(300,80)
 			  }
 			 ];
