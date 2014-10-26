@@ -211,7 +211,9 @@ var HelloWorldLayer = cc.Layer.extend({
         this.shapoid.getBody().resetForces();
         this.shapoid.setRotation( 0 );
         this.shapoid.getBody().setVel(cp.vzero);
+        this.oldShape = this.shapoid.shape;
         this.shapoid.morphToCircloid();
+        this.newShape = this.shapoid.shape;
 
     },
 
