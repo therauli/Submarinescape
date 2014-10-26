@@ -99,13 +99,11 @@ var Shapoid = cc.PhysicsSprite.extend({
     handleMove: function(dir) {
         if (this.type === "circloid") {
             this.applyImpulse(cc.pMult(dir, 100));
-            cc.log('moving');
         }
         
         if (this.type === "triangloid") {
             var angle = this.getRotation() + dir.x * 8;
             this.setRotation(angle);
-            
         }
 
     },
@@ -135,7 +133,7 @@ var Shapoid = cc.PhysicsSprite.extend({
     },
 
     blowUp : function() {
-        if(this.type == "triangloid")
+        if (this.type === "triangloid")
         {
             //Blow up!
         }
