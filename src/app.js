@@ -297,6 +297,7 @@ var HelloWorldLayer = cc.Layer.extend({
 
     collisionRedSugarPost : function(arbiter, space) {
         cc.log('Red sugar post');
+    },
 
     collisionPlatformBegin : function(arbiter, space) {
         cc.log('bounce');
@@ -441,7 +442,7 @@ var HelloWorldLayer = cc.Layer.extend({
             this.space.addBody(body);
             var a = this.shapoid.getPosition();
             var p = body.p;
-            body.applyImpulse(cp.v((p.x - a.x) * 1000, (p.y - a.y) * 1000), cp.vzero);
+            body.applyImpulse(cp.v((p.x - a.x) * 500, (p.y - a.y) * 500), cp.vzero);
             
         }
 
@@ -450,7 +451,7 @@ var HelloWorldLayer = cc.Layer.extend({
     },
     
     addChildPhysics: function(obj, z) {
-        this.addChild(obj, z)
+        this.addChild(obj, z);
         
         cc.log('Adding', obj);
         
