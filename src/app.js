@@ -126,6 +126,17 @@ var HelloWorldLayer = cc.Layer.extend({
     },
 
     loadLevel : function(lvl) {
+        
+        cc.log(lvl, levels.length);
+        if (lvl >= levels.length) {
+            var label = cc.LabelTTF.create("YOU WIN GAME!!!!", "Arial", 35);
+            this.addChild(label, 1000);
+            label.setPosition(cc.winSize.width / 2, - 50);
+            label.runAction(cc.MoveTo.create(3, cc.p(cc.winSize.width / 2, cc.winSize.height / 2)));
+         
+            return;
+        }
+        
         this.initPhysics(cc.winSize);
         
         this.drawNode = new cc.DrawNode();
