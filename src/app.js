@@ -153,13 +153,20 @@ var HelloWorldLayer = cc.Layer.extend({
 
         }
         cc.log('Platforms, done');
-
+/*
         // setup obstacles if any        
         if( levels[lvl]["obstacles"] !== undefined ) {        
             for( var i = 0; i < levels[lvl]["obstacles"].length; i++ ){
                 this.addObstacle( levels[lvl]["obstacles"][i] )
             }
         }
+        */
+        if( levels[lvl]["obstacles"] !== undefined ) {
+            for( var i = 0 ; i < levels[lvl]["obstacles"].length; i++ ) {
+                this.addPipe( levels[lvl]["obstacles"][i] )
+            }
+        }
+
         cc.log('Obstacles, done');
 
         // set sugar if any
@@ -271,6 +278,14 @@ var HelloWorldLayer = cc.Layer.extend({
         this.space.addStaticShape(shape);
 
         this.drawNode.drawRect(cc.p(rect.x, rect.y), cc.p(rect.x + rect.width, rect.y + rect.height), cc.color(127, 108, 179, 255), 1, cc.color(127, 108, 179 ,255));
+    },
+
+    addPipe : function( pos ) {        
+        cc.log('Adding pipe:', pos);
+        var pipe = new Pipe(pos);
+        this.addChildPhysics(pipe, 10);
+        pipe.setVisible(true);
+        pipe.getBody().resetForces();
     },
 
     update:function (dt) {
