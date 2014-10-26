@@ -7,6 +7,7 @@ var res = {
     end_point_png : "res/door.png",
     yellow_sugar_png : "res/YellowSugar.png",
     song_ogg : "res/song.ogg",
+    bounce_ogg: "res/bounce.ogg",
     pipe_png : "res/Pipe.png"
 };
 
