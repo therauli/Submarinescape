@@ -9,7 +9,7 @@ var res = {
     song_ogg : "res/song.ogg",
     pipe_png : "res/Pipe.png",
     blue_sugar_png: "res/BlueSugar.png",
-    red_sugar_png: "res/RedSugar.png"
+    red_sugar_png: "res/RedSugar.png",
     bounce_ogg: "res/bounce.ogg",
     pipe_png : "res/Pipe.png"
 };
