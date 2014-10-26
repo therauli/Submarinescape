@@ -433,7 +433,7 @@ var HelloWorldLayer = cc.Layer.extend({
             var shape = this.toAddShape[i];
             shape.setElasticity(0.5);
             shape.setFriction(0.5);
-            this.space.addShape(shape);
+            //this.space.addShape(shape);
         }
 
         this.toAddShape = [];
